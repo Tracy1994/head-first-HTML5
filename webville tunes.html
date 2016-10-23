@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+	<title>Webville Tunes</title>
+</head>
+<body>
+	<form>
+		<input type="text" name="" id="songTextInput" size="40" placeholder="Song name">
+		<input type="button" name="" id="addButton" value="Add Song">
+	</form>
+	<ul id="playList"></ul>
+<script>
+	window.onload=init;
+	function init(){
+		var button=document.getElementById("addButton");
+		button.onclick= handleButtonClick;
+		loadPlayList();
+	}
+
+	function handleButtonClick(){
+		var inputTxt=document.getElementById("songTextInput");
+		var songName=inputTxt.value;
+		if (songName=="") {
+			alert("please enter a song");
+		}
+		else{
+			var li=document.createElement("li");
+			li.innerHTML=songName;
+			var ul=document.getElementById("playList");
+			ul.appendChild(li);
+			save(songName);
+			inputTxt.value="";
+		}
+
+	}
+
+	function save(item){
+		// debugger;
+		var playListArray=getStoreArray("playList");
+		console.log(playListArray);
+		playListArray.push(item);
+		console.log(playListArray);
+		localStorage.setItem("playList",JSON.stringify(playListArray));
+	}
+
+	function getStoreArray(key){
+		var playListArray=localStorage.getItem(key);
+		if (playListArray==null||playListArray=="") {
+			playListArray = new Array();
+		}
+		else{
+			playListArray=JSON.parse(playListArray);
+		}
+		return playListArray;
+	}
+
+	function getSaveSongs(){
+		return getStoreArray("playList");
+	}
+
+	function loadPlayList(){
+
+		var playListArray=getSaveSongs();
+		var ul = document.getElementById("playList");
+		if (playListArray!=null) {
+			for (var i = 0; i < playListArray.length; i++) {
+				var li=document.createElement("li");
+				li.innerHTML=playListArray[i];
+				ul.appendChild(li);
+			}
+		}
+
+	}
+
+	
+</script>
+</body>
+</html>
